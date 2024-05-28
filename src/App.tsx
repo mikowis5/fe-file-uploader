@@ -1,5 +1,5 @@
 import FilesContainer from './Components/Files/FilesContainer';
-import FileUploader from './Components/FileUploader';
+import FileUploader from './Components/Files/FileUploader';
 import Header from './Components/Header';
 import { ToastContainer } from 'react-toastify';
 

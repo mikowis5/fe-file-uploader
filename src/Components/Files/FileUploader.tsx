@@ -1,11 +1,10 @@
-// @ts-nocheck
-
 import 'react-dropzone-uploader/dist/styles.css'
-import Dropzone from 'react-dropzone-uploader'
+import Dropzone, { IFileWithMeta, StatusValue } from 'react-dropzone-uploader'
 import { useAtom } from 'jotai';
-import { emailAtom, filesAtom, uploadingFilesAtom, usernameAtom } from '../atoms';
+import { emailAtom, filesAtom, uploadingFilesAtom, usernameAtom } from '../../atoms';
 import { toast } from 'react-toastify';
 import isValidEmail from 'is-valid-email'
+import { UploadingFileData } from './UploadingFileData'
 
 const MAX_MB: number = 5;
 
@@ -20,18 +19,18 @@ const FileUploader: React.FC = () => {
 
   const credentialsProvided = username?.length && isValidEmail(email);
 
-  const removeFileFromUploading = (fileId) => {
-    setUploadingFiles(uploadingFiles.filter(file => file.id !== fileId));
+  const removeFileFromUploading = (fileId: string) => {
+    setUploadingFiles(uploadingFiles.filter((file: UploadingFileData) => file.id !== fileId));
   }
 
-  const getUploadParams = ({ meta }) => {
+  const getUploadParams = () => {
     return {
-      url: 'http://localhost/api/files',
+      url: `${process.env.REACT_APP_API_URL}/api/files`,
       fields: { username, email }
     }
   }
 
-  const handleChangeStatus = ({ meta, file, xhr }, status, allFiles) => {
+  const handleChangeStatus = ({ meta, file, xhr }: IFileWithMeta, status: StatusValue, allFiles: IFileWithMeta[]) => {
     const dropzoneFile = allFiles.find(file => file.meta.id === meta.id);
 
     if (! dropzoneFile) {
@@ -40,6 +39,7 @@ const FileUploader: React.FC = () => {
 
     switch (status) {
       case 'preparing':
+        // @ts-ignore
         setUploadingFiles([{ id: meta.id }, ...uploadingFiles]);
         break;
 
@@ -48,7 +48,9 @@ const FileUploader: React.FC = () => {
 
         dropzoneFile.remove();
 
-        const data = JSON.parse(xhr.response).file;
+        const data = JSON.parse(xhr?.response)?.file;
+
+        // @ts-ignore
         setFiles([{ isSuccess: meta.id, ...data }, ...files]);
         break;
 
@@ -68,7 +70,7 @@ const FileUploader: React.FC = () => {
     }
   }
 
-  const handleSubmit = (files, allFiles) => {
+  const handleSubmit = (files: IFileWithMeta[], allFiles: IFileWithMeta[]) => {
     allFiles.forEach(file => file.remove())
   }
 
@@ -90,7 +92,9 @@ const FileUploader: React.FC = () => {
         autoUpload={true}
         canCancel={false}
         disabled={!credentialsProvided || (files => files.some(f => ['preparing', 'getting_upload_params', 'uploading'].includes(f.meta.status)))}
+        // @ts-ignore
         PreviewComponent={null}
+        // @ts-ignore
         SubmitButtonComponent={null}
         submitButtonContent={null}
         submitButtonDisabled
