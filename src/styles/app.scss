@@ -1,0 +1,103 @@
+@import 'theme';
+
+html, body {
+  background: $background;
+  margin: 0;
+  padding: 0;
+}
+
+.main-layout {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: true;
+}
+
+$file-border: rgba(255, 255, 255, 0.00);
+
+.file-container {
+  border: 1px solid $file-border;
+
+  transition: 0.25s opacity;
+
+  &-loading {
+    --angle: 0deg;
+
+    border-image: linear-gradient(var(--angle), rgba(0, 200, 250, 0.65) 10%, $file-border 50%) 10;
+    animation: spinAngle 0.75s linear infinite;
+  }
+
+  &-success {
+    animation: borderSuccess 0.75s linear forwards;
+  }
+
+  .preview-bg {
+    transition: 0.35s;
+  }
+
+  &:hover {
+    .preview-bg {
+      transform: scale(1.05);
+    }
+  }
+}
+
+@keyframes spinAngle {
+  from {
+    --angle: 0deg;
+  }
+
+  to {
+    --angle: 360deg;
+  }
+}
+
+@keyframes borderSuccess {
+  from {
+    border: 1px solid rgba(0, 255, 100, 1);
+  }
+
+  to {
+    border: $file-border;
+  }
+}
+
+.font-border {
+  text-shadow:
+   -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
+  font-family: monospace;
+}
+
+.hover-fadeIn-children {
+  .fade-in-child {
+    opacity: 0;
+    transform: translateY(-30px);
+    transition: 0.35s;
+  }
+
+  &:hover {
+    .fade-in-child {
+      opacity: 1;
+      transform: translateY(-15px);
+    }
+  }
+}
+
+.react-confirm-alert-overlay {
+  background-color: rgba(0,0,0,0.75) !important;
+  backdrop-filter: blur(5px);
+}
+
+.dzu-inputLabelWithFiles {
+  display: none !important;
+}

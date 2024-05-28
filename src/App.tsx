@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import FilesContainer from './Components/Files/FilesContainer';
+import FileUploader from './Components/FileUploader';
+import Header from './Components/Header';
+import { ToastContainer } from 'react-toastify';
 
-function App() {
+import './styles/app.scss';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import 'react-toastify/dist/ReactToastify.css';
+
+interface MainLayoutProps {
+  children: React.ReactNode;
+}
+
+const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+  return <div className="main-layout">{children}</div>;
+};
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <MainLayout>
+      <Header />
+      <FilesContainer />
+      <FileUploader />
+      <ToastContainer />
+    </MainLayout>
+  )
 }
 
 export default App;
